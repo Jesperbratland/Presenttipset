@@ -134,6 +134,31 @@ html, body, [class*="css"], .stApp p, .stApp label, .stApp span, .stApp div {fon
 .kort a:hover {background: #1e2a24; color: #fff !important;}
 .rubrik {font-family: 'Cormorant Garamond', serif; font-size: 2rem; text-align: center; margin: 2.4rem 0 1.2rem; color: #1e2a24;}
 .reklam {text-align: center; color: #a39a90; font-size: .75rem; margin-top: 2rem;}
+.rutnat {display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1rem;}
+.rutnat .kort {margin-bottom: 0;}
+
+/* ---------- Mobil ---------- */
+@media (max-width: 640px) {
+  .block-container {padding: 1.4rem .9rem 2rem !important;}
+  .topp {margin-bottom: 1.4rem;}
+  .topp svg {width: 64px; height: 64px;}
+  .topp h1 {font-size: 2.4rem;}
+  .topp p {font-size: .9rem;}
+  [data-testid="stForm"] {padding: 1.2rem 1rem 1rem; border-radius: 14px;}
+  [data-baseweb="select"] input, [data-baseweb="select"] div {font-size: 16px !important;}  /* hindrar iPhone från att zooma */
+  [data-testid="stBaseButton-pills"], [data-testid="stBaseButton-pillsActive"] {padding: .45rem 1rem; min-height: 40px;}
+  [data-testid="stFormSubmitButton"] button {padding: .85rem 1rem; font-size: 1rem;}
+  .rubrik {font-size: 1.6rem; margin: 1.8rem 0 1rem;}
+  .rutnat {grid-template-columns: 1fr 1fr; gap: .7rem;}
+  .kort {padding: 1rem .7rem .9rem; border-radius: 14px;}
+  .kort svg {width: 44px; height: 44px;}
+  .kort h4 {font-size: 1.12rem;}
+  .kort .besk {font-size: .8rem;}
+  .kort a {display: block; padding: .6rem .5rem; font-size: .85rem;}
+}
+@media (max-width: 380px) {
+  .rutnat {grid-template-columns: 1fr;}
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -169,13 +194,13 @@ if skicka:
     else:
         st.markdown(f'<div class="rubrik">{len(res)} förslag till {mottagare.lower()}</div>',
                     unsafe_allow_html=True)
-        cols = st.columns(3)
+        kort = []
         for i, ((sc, traffar), p) in enumerate(res):
             namn, pris, *_, besk, url = p
             paket, snore = FARGER[i % len(FARGER)]
             lank = url or "https://www.google.com/search?tbm=shop&q=" + quote_plus(namn)
             match = f'<div class="match">Matchar {", ".join(traffar).lower()}</div>' if traffar else ""
-            cols[i % 3].markdown(html(f"""
+            kort.append(f"""
 <div class="kort">
   {present(56, paket, snore)}
   <h4>{namn}</h4>
@@ -183,7 +208,9 @@ if skicka:
   <div class="pris">{format(pris, ",").replace(",", " ")} kr</div>
   {match}
   <a href="{lank}" target="_blank" rel="sponsored noopener">Se presenten</a>
-</div>"""), unsafe_allow_html=True)
+</div>""")
+        # Ett rutnät som anpassar antalet kolumner efter skärmen och behåller ordningen på mobilen
+        st.markdown(html('<div class="rutnat">' + "".join(kort) + "</div>"), unsafe_allow_html=True)
 
 st.markdown('<div class="reklam">Reklamlänkar · Presenttipset kan få provision när du handlar via länkarna</div>',
             unsafe_allow_html=True)

@@ -113,6 +113,12 @@ html, body, [class*="css"], .stApp p, .stApp label, .stApp span, .stApp div {fon
 [data-testid="stSlider"] [role="slider"] {background: #9b1c1c; box-shadow: none;}
 [data-testid="stSlider"] div[data-testid="stThumbValue"] {color: #9b1c1c;}
 
+[data-testid="stBaseButton-pills"] {background: #faf6ef; border: 1px solid #e4d9c8; color: #1e2a24;
+        border-radius: 99px; padding: .3rem .95rem;}
+[data-testid="stBaseButton-pills"]:hover {border-color: #9b1c1c; color: #9b1c1c;}
+[data-testid="stBaseButton-pillsActive"] {background: #1f4d3a !important; border: 1px solid #1f4d3a !important;
+        color: #fff !important; border-radius: 99px; padding: .3rem .95rem;}
+[data-testid="stBaseButton-pillsActive"] p {color: #fff !important;}
 .stButton button, [data-testid="stFormSubmitButton"] button {background: #9b1c1c; color: #fff; border: 0;
         border-radius: 99px; padding: .65rem 2.2rem; font-weight: 500; letter-spacing: .05em; width: 100%;}
 [data-testid="stFormSubmitButton"] button:hover {background: #7d1414; color: #fff;}
@@ -147,7 +153,7 @@ with st.form("fragor"):
     budget = c1.selectbox("Budget", list(BUDGET), index=2)
     kon = c2.selectbox("Kön", ["Spelar ingen roll", "Kvinna", "Man"])
     alder = st.slider("Ålder", 0, 100, 35)
-    intressen = st.multiselect("Intressen", INTRESSEN, placeholder="Välj ett eller flera")
+    intressen = st.pills("Intressen", INTRESSEN, selection_mode="multi") or []
     skicka = st.form_submit_button("Hitta presenter")
 
 if skicka:

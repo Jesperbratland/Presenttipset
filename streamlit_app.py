@@ -3,47 +3,55 @@ from urllib.parse import quote_plus
 
 st.set_page_config(page_title="Presenttipset", page_icon=":material/redeem:", layout="centered")
 
-# Produkt: namn, pris, minålder, maxålder, kön, intressen, mottagare, tillfällen, typ, beskrivning, affiliatelänk
+# Produkt: namn, pris, minålder, maxålder, kön, intressen, mottagare, tillfällen, typ, beskrivning, länk, butik, bild
 P = [
-    ("Gjutjärnsgryta", 899, 25, 99, "alla", "Matlagning", "Partner|Mamma|Pappa|Svärförälder", "Jul|Födelsedag|Inflyttning", "sak", "Håller livet ut, perfekt för långkok.", ""),
-    ("Japansk kockkniv", 1290, 25, 99, "alla", "Matlagning", "Partner|Pappa|Vän", "Jul|Födelsedag|Fars dag", "sak", "Rakbladsvass och rolig att laga mat med.", ""),
-    ("Matlagningskurs för två", 1695, 20, 80, "alla", "Matlagning|Dryck", "Partner|Mamma|Pappa|Vän", "alla", "upplevelse", "Lär er ett nytt kök tillsammans.", ""),
-    ("Surdegskit", 299, 18, 99, "alla", "Matlagning", "alla", "alla", "sak", "Jäskorg, degskrapa och surdegsgrund.", ""),
-    ("Handkvarn för kaffe", 599, 20, 99, "alla", "Kaffe & te", "alla", "alla", "sak", "Nymalet kaffe varje morgon.", ""),
-    ("Teprovning-ask", 279, 16, 99, "alla", "Kaffe & te|Avkoppling", "alla", "alla", "sak", "24 sorters te i fin ask.", ""),
-    ("Whiskyprovning", 795, 20, 99, "alla", "Dryck", "Pappa|Partner|Vän|Svärförälder", "Födelsedag|Fars dag|Jul", "upplevelse", "Guidad provning med expert.", ""),
-    ("Smart träningsklocka", 2490, 15, 75, "alla", "Träning|Teknik", "Partner|Barn|Syskon|Mamma|Pappa", "Jul|Födelsedag|Student", "sak", "Puls, GPS och sömnanalys.", ""),
-    ("Massagepistol", 999, 18, 80, "alla", "Träning|Avkoppling", "alla", "alla", "sak", "Mjukar upp stela muskler.", ""),
-    ("Pannlampa 1000 lumen", 399, 12, 99, "alla", "Friluftsliv|Träning", "alla", "alla", "sak", "Stark och laddbar.", ""),
-    ("Övernattning i trädkoja", 3490, 18, 80, "alla", "Friluftsliv|Resor|Avkoppling", "Partner|Mamma|Pappa", "Födelsedag|Alla hjärtans dag|Jul", "upplevelse", "En natt i naturen för två.", ""),
-    ("Brusreducerande hörlurar", 1990, 12, 80, "alla", "Teknik|Musik|Resor", "alla", "Jul|Födelsedag|Student", "sak", "Stäng ute världen.", ""),
-    ("Bluetooth-högtalare", 799, 10, 70, "alla", "Musik|Teknik|Friluftsliv", "alla", "alla", "sak", "Vattentålig, för bryggan och duschen.", ""),
-    ("Gaming-headset", 899, 10, 45, "alla", "Gaming|Teknik", "Barn|Syskon|Partner|Vän", "Jul|Födelsedag", "sak", "Tydligt ljud och mikrofon.", ""),
-    ("Digital fotoram", 1290, 40, 99, "alla", "Teknik|Inredning", "Mor-/farförälder|Mamma|Pappa|Svärförälder", "Jul|Födelsedag|Mors dag|Fars dag", "personlig", "Skicka bilder direkt från mobilen.", ""),
-    ("Escape room", 1200, 12, 70, "alla", "Spel & pussel|Gaming", "Vän|Syskon|Kollega|Barn", "Födelsedag|Student", "upplevelse", "60 minuter att ta sig ut.", ""),
-    ("E-boksläsare", 1590, 12, 99, "alla", "Läsning|Resor", "alla", "Jul|Födelsedag|Student", "sak", "Tusentals böcker i fickan.", ""),
-    ("Ljudbokprenumeration", 507, 12, 99, "alla", "Läsning|Avkoppling", "alla", "alla", "upplevelse", "Obegränsat i tre månader.", ""),
-    ("Pussel 1000 bitar", 229, 10, 99, "alla", "Spel & pussel|Avkoppling", "alla", "alla", "sak", "Mysigt pussel med vackert motiv.", ""),
-    ("Sällskapsspel", 349, 16, 80, "alla", "Spel & pussel", "alla", "alla", "rolig", "Garanterade skratt.", ""),
-    ("Akvarellkit", 449, 10, 99, "alla", "Kreativt", "alla", "alla", "sak", "Kom igång direkt.", ""),
-    ("Keramikkurs", 995, 16, 80, "alla", "Kreativt|Inredning", "Partner|Mamma|Syskon|Vän", "Födelsedag|Mors dag|Jul", "upplevelse", "Dreja din egen kopp.", ""),
-    ("Doftljus", 299, 16, 99, "alla", "Inredning|Avkoppling", "alla", "alla", "sak", "Mysigt för vinterkvällar.", ""),
-    ("Tyngdtäcke", 1290, 15, 99, "alla", "Avkoppling", "Partner|Mamma|Pappa|Syskon|Barn", "Jul|Födelsedag", "sak", "Hjälper många att sova bättre.", ""),
-    ("Spa-dag för två", 2390, 18, 90, "alla", "Avkoppling|Skönhet", "Partner|Mamma|Syskon|Vän", "alla", "upplevelse", "En hel dag av lugn.", ""),
-    ("Inomhusodling med LED", 899, 18, 99, "alla", "Odling|Matlagning", "alla", "alla", "sak", "Färska örter året runt.", ""),
-    ("Stjärnkarta", 449, 16, 99, "alla", "Inredning", "Partner|Barn|Mamma|Pappa", "Alla hjärtans dag|Födelsedag|Jul", "personlig", "Himlen från er speciella dag.", ""),
-    ("Hudvårdsset", 549, 16, 90, "kvinna", "Skönhet", "Partner|Mamma|Syskon|Vän", "alla", "sak", "Rengöring, serum och kräm.", ""),
-    ("Skäggvårdskit", 399, 18, 90, "man", "Skönhet|Mode", "Partner|Pappa|Syskon|Vän", "alla", "sak", "Olja, balm och kam.", ""),
-    ("Kashmirhalsduk", 1190, 20, 99, "alla", "Mode", "Partner|Mamma|Pappa|Mor-/farförälder", "Jul|Födelsedag", "sak", "Mjuk och varm i många år.", ""),
-    ("Smycke med initialer", 690, 15, 99, "kvinna", "Mode", "Partner|Mamma|Barn|Syskon", "alla", "personlig", "Halsband med valfria initialer.", ""),
-    ("Roliga strumpor", 179, 5, 99, "alla", "Mode", "alla", "alla", "rolig", "Klassikern, fast roligare.", ""),
-    ("Skivspelare", 2290, 18, 99, "alla", "Musik|Inredning", "Partner|Pappa|Mamma|Vän", "Jul|Födelsedag", "sak", "Retro med Bluetooth.", ""),
-    ("Skrapkarta över världen", 299, 12, 99, "alla", "Resor", "alla", "alla", "rolig", "Skrapa fram länder du besökt.", ""),
-    ("Porträtt av husdjuret", 599, 12, 99, "alla", "Djur", "alla", "alla", "personlig", "Tecknat från ett foto.", ""),
-    ("Experimentlåda", 349, 6, 14, "alla", "Kreativt|Teknik", "Barn|Syskon", "Jul|Födelsedag", "sak", "20 roliga experiment.", ""),
-    ("Byggsats robot", 599, 8, 16, "alla", "Teknik|Gaming", "Barn|Syskon", "Jul|Födelsedag", "sak", "Bygg och programmera.", ""),
-    ("Gosedjur med namn", 299, 0, 8, "alla", "Djur", "Barn", "Jul|Födelsedag", "personlig", "Med barnets namn.", ""),
-    ("Choklad från chokladeri", 199, 10, 99, "alla", "Matlagning|Kaffe & te", "alla", "alla", "sak", "Säkert kort som tack.", ""),
+    # --- Riktiga produkter ---
+    ("SkiSoft – skydd för smalbenet i pjäxan", 399, 5, 80, "alla", "Vintersport|Sport|Friluftsliv|Träning",
+     "alla", "Jul|Födelsedag", "sak",
+     "Tunn strumpa med mjuk dyna mot pjäxan. Slut på ömma smalben i backen – passar både vuxna och barn.",
+     "https://sivelo.se/products/skisoft", "Sivelo",
+     "https://sivelo.se/cdn/shop/files/hf_20261114_120545_5c9eef6c-89eb-494f-befb-0263f336f921.png?v=1794657994&width=600"),
+
+    # --- Exempelprodukter ---
+    ("Gjutjärnsgryta", 899, 25, 99, "alla", "Matlagning", "Partner|Mamma|Pappa|Svärförälder", "Jul|Födelsedag|Inflyttning", "sak", "Håller livet ut, perfekt för långkok.", "", "", ""),
+    ("Japansk kockkniv", 1290, 25, 99, "alla", "Matlagning", "Partner|Pappa|Vän", "Jul|Födelsedag|Fars dag", "sak", "Rakbladsvass och rolig att laga mat med.", "", "", ""),
+    ("Matlagningskurs för två", 1695, 20, 80, "alla", "Matlagning|Dryck", "Partner|Mamma|Pappa|Vän", "alla", "upplevelse", "Lär er ett nytt kök tillsammans.", "", "", ""),
+    ("Surdegskit", 299, 18, 99, "alla", "Matlagning", "alla", "alla", "sak", "Jäskorg, degskrapa och surdegsgrund.", "", "", ""),
+    ("Handkvarn för kaffe", 599, 20, 99, "alla", "Kaffe & te", "alla", "alla", "sak", "Nymalet kaffe varje morgon.", "", "", ""),
+    ("Teprovning-ask", 279, 16, 99, "alla", "Kaffe & te|Avkoppling", "alla", "alla", "sak", "24 sorters te i fin ask.", "", "", ""),
+    ("Whiskyprovning", 795, 20, 99, "alla", "Dryck", "Pappa|Partner|Vän|Svärförälder", "Födelsedag|Fars dag|Jul", "upplevelse", "Guidad provning med expert.", "", "", ""),
+    ("Smart träningsklocka", 2490, 15, 75, "alla", "Träning|Teknik", "Partner|Barn|Syskon|Mamma|Pappa", "Jul|Födelsedag|Student", "sak", "Puls, GPS och sömnanalys.", "", "", ""),
+    ("Massagepistol", 999, 18, 80, "alla", "Träning|Avkoppling", "alla", "alla", "sak", "Mjukar upp stela muskler.", "", "", ""),
+    ("Pannlampa 1000 lumen", 399, 12, 99, "alla", "Friluftsliv|Träning", "alla", "alla", "sak", "Stark och laddbar.", "", "", ""),
+    ("Övernattning i trädkoja", 3490, 18, 80, "alla", "Friluftsliv|Resor|Avkoppling", "Partner|Mamma|Pappa", "Födelsedag|Alla hjärtans dag|Jul", "upplevelse", "En natt i naturen för två.", "", "", ""),
+    ("Brusreducerande hörlurar", 1990, 12, 80, "alla", "Teknik|Musik|Resor", "alla", "Jul|Födelsedag|Student", "sak", "Stäng ute världen.", "", "", ""),
+    ("Bluetooth-högtalare", 799, 10, 70, "alla", "Musik|Teknik|Friluftsliv", "alla", "alla", "sak", "Vattentålig, för bryggan och duschen.", "", "", ""),
+    ("Gaming-headset", 899, 10, 45, "alla", "Gaming|Teknik", "Barn|Syskon|Partner|Vän", "Jul|Födelsedag", "sak", "Tydligt ljud och mikrofon.", "", "", ""),
+    ("Digital fotoram", 1290, 40, 99, "alla", "Teknik|Inredning", "Mor-/farförälder|Mamma|Pappa|Svärförälder", "Jul|Födelsedag|Mors dag|Fars dag", "personlig", "Skicka bilder direkt från mobilen.", "", "", ""),
+    ("Escape room", 1200, 12, 70, "alla", "Spel & pussel|Gaming", "Vän|Syskon|Kollega|Barn", "Födelsedag|Student", "upplevelse", "60 minuter att ta sig ut.", "", "", ""),
+    ("E-boksläsare", 1590, 12, 99, "alla", "Läsning|Resor", "alla", "Jul|Födelsedag|Student", "sak", "Tusentals böcker i fickan.", "", "", ""),
+    ("Ljudbokprenumeration", 507, 12, 99, "alla", "Läsning|Avkoppling", "alla", "alla", "upplevelse", "Obegränsat i tre månader.", "", "", ""),
+    ("Pussel 1000 bitar", 229, 10, 99, "alla", "Spel & pussel|Avkoppling", "alla", "alla", "sak", "Mysigt pussel med vackert motiv.", "", "", ""),
+    ("Sällskapsspel", 349, 16, 80, "alla", "Spel & pussel", "alla", "alla", "rolig", "Garanterade skratt.", "", "", ""),
+    ("Akvarellkit", 449, 10, 99, "alla", "Kreativt", "alla", "alla", "sak", "Kom igång direkt.", "", "", ""),
+    ("Keramikkurs", 995, 16, 80, "alla", "Kreativt|Inredning", "Partner|Mamma|Syskon|Vän", "Födelsedag|Mors dag|Jul", "upplevelse", "Dreja din egen kopp.", "", "", ""),
+    ("Doftljus", 299, 16, 99, "alla", "Inredning|Avkoppling", "alla", "alla", "sak", "Mysigt för vinterkvällar.", "", "", ""),
+    ("Tyngdtäcke", 1290, 15, 99, "alla", "Avkoppling", "Partner|Mamma|Pappa|Syskon|Barn", "Jul|Födelsedag", "sak", "Hjälper många att sova bättre.", "", "", ""),
+    ("Spa-dag för två", 2390, 18, 90, "alla", "Avkoppling|Skönhet", "Partner|Mamma|Syskon|Vän", "alla", "upplevelse", "En hel dag av lugn.", "", "", ""),
+    ("Inomhusodling med LED", 899, 18, 99, "alla", "Odling|Matlagning", "alla", "alla", "sak", "Färska örter året runt.", "", "", ""),
+    ("Stjärnkarta", 449, 16, 99, "alla", "Inredning", "Partner|Barn|Mamma|Pappa", "Alla hjärtans dag|Födelsedag|Jul", "personlig", "Himlen från er speciella dag.", "", "", ""),
+    ("Hudvårdsset", 549, 16, 90, "kvinna", "Skönhet", "Partner|Mamma|Syskon|Vän", "alla", "sak", "Rengöring, serum och kräm.", "", "", ""),
+    ("Skäggvårdskit", 399, 18, 90, "man", "Skönhet|Mode", "Partner|Pappa|Syskon|Vän", "alla", "sak", "Olja, balm och kam.", "", "", ""),
+    ("Kashmirhalsduk", 1190, 20, 99, "alla", "Mode", "Partner|Mamma|Pappa|Mor-/farförälder", "Jul|Födelsedag", "sak", "Mjuk och varm i många år.", "", "", ""),
+    ("Smycke med initialer", 690, 15, 99, "kvinna", "Mode", "Partner|Mamma|Barn|Syskon", "alla", "personlig", "Halsband med valfria initialer.", "", "", ""),
+    ("Roliga strumpor", 179, 5, 99, "alla", "Mode", "alla", "alla", "rolig", "Klassikern, fast roligare.", "", "", ""),
+    ("Skivspelare", 2290, 18, 99, "alla", "Musik|Inredning", "Partner|Pappa|Mamma|Vän", "Jul|Födelsedag", "sak", "Retro med Bluetooth.", "", "", ""),
+    ("Skrapkarta över världen", 299, 12, 99, "alla", "Resor", "alla", "alla", "rolig", "Skrapa fram länder du besökt.", "", "", ""),
+    ("Porträtt av husdjuret", 599, 12, 99, "alla", "Djur", "alla", "alla", "personlig", "Tecknat från ett foto.", "", "", ""),
+    ("Experimentlåda", 349, 6, 14, "alla", "Kreativt|Teknik", "Barn|Syskon", "Jul|Födelsedag", "sak", "20 roliga experiment.", "", "", ""),
+    ("Byggsats robot", 599, 8, 16, "alla", "Teknik|Gaming", "Barn|Syskon", "Jul|Födelsedag", "sak", "Bygg och programmera.", "", "", ""),
+    ("Gosedjur med namn", 299, 0, 8, "alla", "Djur", "Barn", "Jul|Födelsedag", "personlig", "Med barnets namn.", "", "", ""),
+    ("Choklad från chokladeri", 199, 10, 99, "alla", "Matlagning|Kaffe & te", "alla", "alla", "sak", "Säkert kort som tack.", "", "", ""),
 ]
 
 INTRESSEN = sorted({i for p in P for i in p[5].split("|")})
@@ -76,7 +84,7 @@ def html(text):
 
 
 def poang(p, s):
-    namn, pris, amin, amax, kon, intr, mott, till, typ, besk, url = p
+    namn, pris, amin, amax, kon, intr, mott, till, typ, besk, url, butik, bild = p
     if not (s["bmin"] <= pris <= s["bmax"]) or not (amin <= s["alder"] <= amax):
         return None
     if s["kon"] != "Spelar ingen roll" and kon != "alla" and kon != s["kon"].lower():
@@ -134,6 +142,8 @@ html, body, [class*="css"], .stApp p, .stApp label, .stApp span, .stApp div {fon
 .kort a:hover {background: #1e2a24; color: #fff !important;}
 .rubrik {font-family: 'Cormorant Garamond', serif; font-size: 2rem; text-align: center; margin: 2.4rem 0 1.2rem; color: #1e2a24;}
 .reklam {text-align: center; color: #a39a90; font-size: .75rem; margin-top: 2rem;}
+.kort img.bild {width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; background: #f3ece0;}
+.kort .butik {color: #a39a90; font-weight: 400; font-size: .85rem;}
 .rutnat {display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1rem;}
 .rutnat .kort {margin-bottom: 0;}
 
@@ -152,6 +162,7 @@ html, body, [class*="css"], .stApp p, .stApp label, .stApp span, .stApp div {fon
   .rutnat {grid-template-columns: 1fr 1fr; gap: .7rem;}
   .kort {padding: 1rem .7rem .9rem; border-radius: 14px;}
   .kort svg {width: 44px; height: 44px;}
+  .kort img.bild {border-radius: 8px;}
   .kort h4 {font-size: 1.12rem;}
   .kort .besk {font-size: .8rem;}
   .kort a {display: block; padding: .6rem .5rem; font-size: .85rem;}
@@ -196,16 +207,16 @@ if skicka:
                     unsafe_allow_html=True)
         kort = []
         for i, ((sc, traffar), p) in enumerate(res):
-            namn, pris, *_, besk, url = p
+            namn, pris, *_, besk, url, butik, bild = p
             paket, snore = FARGER[i % len(FARGER)]
             lank = url or "https://www.google.com/search?tbm=shop&q=" + quote_plus(namn)
             match = f'<div class="match">Matchar {", ".join(traffar).lower()}</div>' if traffar else ""
             kort.append(f"""
 <div class="kort">
-  {present(56, paket, snore)}
+  {f'<img class="bild" src="{bild}" alt="{namn}">' if bild else present(56, paket, snore)}
   <h4>{namn}</h4>
   <p class="besk">{besk}</p>
-  <div class="pris">{format(pris, ",").replace(",", " ")} kr</div>
+  <div class="pris">{format(pris, ",").replace(",", " ")} kr{f'<span class="butik"> · {butik}</span>' if butik else ""}</div>
   {match}
   <a href="{lank}" target="_blank" rel="sponsored noopener">Se presenten</a>
 </div>""")
